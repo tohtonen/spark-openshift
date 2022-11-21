@@ -300,58 +300,6 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-    name: ${CLUSTER_NAME}-spark-worker
-  spec:
-    replicas: ${WORKER_REPLICAS}
-    template:
-      metadata:
-        annotations:
-          description: Spark Worker
-          template.alpha.openshift.io/wait-for-ready: "true"
-        labels:
-          app: ${CLUSTER_NAME}-spark-worker
-      spec:
-        volumes:
-          - name: ${CLUSTER_NAME}-vol
-            persistentVolumeClaim:
-              claimName: ${CLUSTER_NAME}-pvc
-        containers:
-          - name: spark-worker
-            image: ${WORKER_IMAGE}
-            imagePullPolicy: IfNotPresent
-            env:
-              - name: SPARK_WORKER_MEMORY
-                value: "${WORKER_MEMORY}"
-              - name: SPARK_WORKER_CORES
-                value: "${WORKER_CPU}"
-              - name: SPARK_MASTER_SERVICE_HOST
-                value: ${CLUSTER_NAME}-spark-master
-              - name: SPARK_WORKER_DIRS
-                value: "/tmp/worker"
-              - name: START_COMMAND
-                value: "/usr/local/bin/start-worker.sh"
-            ports:
-              - containerPort: 8081
-            livenessProbe:
-              httpGet:
-                path: /
-                port: 8081
-              initialDelaySeconds: 30
-              timeoutSeconds: 30
-            resources:
-              requests:
-                  cpu: ${WORKER_CPU}
-                  memory: ${WORKER_MEMORY}
-              limits:
-                  cpu: ${WORKER_CPU}
-                  memory: ${WORKER_MEMORY}
-            volumeMounts:
-            - name: ${CLUSTER_NAME}-vol
-              mountPath: /mnt/${CLUSTER_NAME}-pvc
-
-- apiVersion: v1
-  kind: DeploymentConfig
-  metadata:
     annotations:
       description: Spark jupyter notebook
       template.alpha.openshift.io/wait-for-ready: "true"
