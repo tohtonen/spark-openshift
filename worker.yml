@@ -41,11 +41,11 @@ spec:
             timeoutSeconds: 30
           resources:
             requests:
-                cpu: "1"
-                memory: "4G"
+                cpu: '500m'
+                memory: '4G'
             limits:
-                cpu: "1"
-                memory: "4G"
+                cpu: '500m'
+                memory: '4G'
           volumeMounts:
           - name: tuomas-test-vol
             mountPath: /mnt/tuomas-test-pvc
